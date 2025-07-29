@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { verifyToken } from './lib/jwt.js';
+import { verifyToken } from '../lib/jwt.js';
 
 // Define protected routes
 const protectedRoutes = {
