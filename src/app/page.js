@@ -2,13 +2,11 @@
 
 import { useState, useEffect } from 'react';
 import LoginForm from './components/LoginForm';
-import RegisterForm from './components/RegisterForm';
 import UserProfile from './components/UserProfile';
 
 export default function Home() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [showRegister, setShowRegister] = useState(false);
 
   useEffect(() => {
     checkAuthStatus();
@@ -47,10 +45,10 @@ export default function Home() {
       <div className="max-w-4xl mx-auto px-4">
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-4">
-            JWT Authentication System
+            Ghorer Khabar Management System
           </h1>
           <p className="text-lg text-gray-600">
-            A secure login system with role-based access control
+            Meal management system with role-based access control
           </p>
         </div>
 
@@ -72,12 +70,14 @@ export default function Home() {
                     >
                       User Dashboard
                     </a>
-                    <a
-                      href="/admin"
-                      className="block w-full text-center px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
-                    >
-                      Admin Dashboard
-                    </a>
+                    {user.role === 'admin' && (
+                      <a
+                        href="/admin"
+                        className="block w-full text-center px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+                      >
+                        Admin Dashboard
+                      </a>
+                    )}
                   </div>
                 </div>
                 
@@ -89,11 +89,13 @@ export default function Home() {
                       endpoint="/api/protected/user"
                       description="Test user API access"
                     />
-                    <ProtectedRouteDemo 
-                      title="Admin API" 
-                      endpoint="/api/protected/admin"
-                      description="Test admin API access"
-                    />
+                    {user.role === 'admin' && (
+                      <ProtectedRouteDemo 
+                        title="Admin API" 
+                        endpoint="/api/protected/admin"
+                        description="Test admin API access"
+                      />
+                    )}
                   </div>
                 </div>
               </div>
@@ -101,51 +103,38 @@ export default function Home() {
           </div>
         ) : (
           <div className="max-w-md mx-auto">
-            {showRegister ? (
-              <div>
-                <RegisterForm />
-                <div className="text-center mt-4">
-                  <button
-                    onClick={() => setShowRegister(false)}
-                    className="text-blue-600 hover:text-blue-800 underline"
-                  >
-                    Already have an account? Login
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-6">
-                <div>
-                  <LoginForm />
-                  <div className="text-center mt-4">
-                    <button
-                      onClick={() => setShowRegister(true)}
-                      className="text-blue-600 hover:text-blue-800 underline"
-                    >
-                      Don't have an account? Register
-                    </button>
+            <div className="space-y-6">
+              <LoginForm />
+              
+              <div className="bg-yellow-50 border border-yellow-200 rounded-md p-4">
+                <div className="flex">
+                  <div className="flex-shrink-0">
+                    <svg className="h-5 w-5 text-yellow-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                    </svg>
                   </div>
-                </div>
-                
-                <div className="text-center">
-                  <p className="text-sm text-gray-600 mb-2">Or visit dedicated pages:</p>
-                  <div className="flex justify-center space-x-4">
-                    <a
-                      href="/login"
-                      className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
-                    >
-                      Login Page
-                    </a>
-                    <a
-                      href="/register"
-                      className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50"
-                    >
-                      Register Page
-                    </a>
+                  <div className="ml-3">
+                    <h3 className="text-sm font-medium text-yellow-800">
+                      Account Required
+                    </h3>
+                    <div className="mt-2 text-sm text-yellow-700">
+                      <p>
+                        New users must be created by an administrator. Please contact your admin to get an account.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
-            )}
+              
+              <div className="text-center">
+                <a
+                  href="/login"
+                  className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700"
+                >
+                  Go to Login Page
+                </a>
+              </div>
+            </div>
           </div>
         )}
       </div>
